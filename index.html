@@ -42,7 +42,7 @@
 
       // Optional: if you are testing from file://, paste your deployed https URL here.
       // Leave blank when the page is already opened from the deployed website.
-      window.AYSG_PUBLIC_APP_URL = "";
+      window.AYSG_PUBLIC_APP_URL = "https://testing-website-hazel.vercel.app/";
 
       (function () {
         if (typeof emailjs !== "undefined") {
@@ -6822,7 +6822,9 @@
       // ══════════════════════════════════════════════════════════════════════
       async function _gSendAdminApprovalEmail(name, email, sessId, token) {
         try {
-          const currentPageUrl = window.location.href.split("#")[0].split("?")[0];
+          const currentPageUrl = window.location.href
+            .split("#")[0]
+            .split("?")[0];
           const configuredUrl = (window.AYSG_PUBLIC_APP_URL || "").trim();
           const appUrl = /^https?:\/\//i.test(configuredUrl)
             ? configuredUrl.replace(/[?#].*$/, "")
@@ -6831,19 +6833,25 @@
               : "";
 
           if (!appUrl) {
-            const msg = "Approval links need the HTML file to be opened from a public http/https URL, not as a local file.";
+            const msg =
+              "Approval links need the HTML file to be opened from a public http/https URL, not as a local file.";
             console.error(msg);
-            if (typeof showToast === "function") showToast("Admin email not sent: publish the site first so approval buttons can open it.", "#c0392b");
+            if (typeof showToast === "function")
+              showToast(
+                "Admin email not sent: publish the site first so approval buttons can open it.",
+                "#c0392b",
+              );
             throw new Error(msg);
           }
 
           const approveUrl = `${appUrl}?aysg_action=approve&sid=${encodeURIComponent(sessId)}&tok=${encodeURIComponent(token)}`;
-          const rejectUrl  = `${appUrl}?aysg_action=reject&sid=${encodeURIComponent(sessId)}&tok=${encodeURIComponent(token)}`;
-          const escAttr = (value) => String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/"/g, "&quot;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;");
+          const rejectUrl = `${appUrl}?aysg_action=reject&sid=${encodeURIComponent(sessId)}&tok=${encodeURIComponent(token)}`;
+          const escAttr = (value) =>
+            String(value)
+              .replace(/&/g, "&amp;")
+              .replace(/"/g, "&quot;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
           const approveHref = escAttr(approveUrl);
           const rejectHref = escAttr(rejectUrl);
           const timeStr = new Date().toLocaleString("en-IN", {
@@ -6912,7 +6920,7 @@
         const sid = p.get("sid");
         const tok = p.get("tok");
         if (!action || !sid || !tok) return; // normal page load — skip
-          if (!["approve", "reject"].includes(action)) return;
+        if (!["approve", "reject"].includes(action)) return;
 
         // Clean the URL immediately so refresh doesn't re-trigger
         history.replaceState({}, "", location.pathname);
